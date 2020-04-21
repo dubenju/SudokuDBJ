@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- 打包 -->
+<project name="sudokudbj" default="main" basedir=".">
+
+  <path id="classpath">
+    <fileset dir="../lib">
+      <include name="**/*.jar"/>
+      <exclude name="**/junit-x.x.jar"/>
+    </fileset>
+  </path>
+
+  <property file="build.properties"/>
+  <property name="build.properties" value="build.properties"/>
+
+  <property name="apiDocsDir" value="./docs/api"/>
+
+  <tstamp>
+    <format property="now" pattern="yyyyMMdd-HHmmss" />
+  </tstamp>
+
+  <target name="clean" description="--> cleans up the build directory">
+    <delete dir="${build.dest}/sudokudbj"/>
+    <delete dir="./docs"/>
+    <!-- <delete file="./sudokudbj-${build.version}*.jar"/> -->
+  </target>
+
+  <target name="compile" description="--> compiles the source code">
+    <mkdir dir="${build.dest}" />
+    <javac srcdir="${src.dir}"
+          destdir="${build.dest}"
+            debug="${debug}"
+      deprecation="${deprecation}"
+         optimize="${optimize}"
+         encoding="UTF-8">
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <!-- <copy
+      file="${src.dir}/a/b"
+      tofile="${build.dest}/a/b"
+      filtering="yes" /> -->
+      <jar jarfile="./sudokudbj-${build.version}-${now}.jar"
+           basedir="${build.dest}"
+           includes="/sudokudbj/**" />
+  </target>
+
+  <target name="javadoc" >
+    <mkdir dir="${apiDocsDir}" />
+    <javadoc packagenames="sudokudbj"
+             sourcepath="${src.dir}"
+             destdir="${apiDocsDir}"
+             author="ture"
+             version="ture"
+             use="true"
+             windowtitle="Sudoku(DBJ)API"
+             defaultexcludes="yes"
+             encoding="utf-8"
+             charset="utf-8"
+             locale="en_US"
+             >
+
+      <doctitle><![CDATA[<h1>Sudoku(DBJ)API</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2020 dubenju. All right reserved.</i>]]></bottom>
+
+      <packageset dir="${src.dir}" defaultexcludes="yes">
+        <include name="sudokudbj/**" />
+      </packageset>
+    </javadoc>
+  </target>
+
+  <target name="main" depends="jar, javadoc">
+    <zip zipfile="./sudokudbj-src-${build.version}-${now}.zip" basedir=".."
+         includes="src/**"
+         excludes="**/.git/**;**/build/**;**/input/**;**/classes/**" />
+    <zip zipfile="./sudokudbj-doc-${build.version}-${now}.zip" basedir="."
+         includes="docs/**"
+         excludes="**/.git/**;**/build/**;**/input/**;**/classes/**" />
+  </target>
+</project>

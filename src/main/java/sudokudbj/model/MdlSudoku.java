@@ -105,9 +105,24 @@ public class MdlSudoku {
         return result;
     }
 
+    public String getText() {
+        StringBuilder buf = new StringBuilder();
+        int j = 0;
+        for(MdlSudokuCell v : cells) {
+            buf .append(v);
+             j ++;
+             if (j % 9 == 0) {
+                 buf .append("\n");
+             } else {
+                 buf .append(",");
+             }
+         }// for
+        return buf.toString();
+    }
+
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int j = 0;
         for(MdlSudokuCell v : cells) {
            buf .append(v);
